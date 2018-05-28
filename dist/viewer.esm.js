@@ -5,7 +5,7 @@
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2018-05-27T07:33:19.361Z
+ * Date: 2018-05-28T14:38:55.999Z
  */
 
 var DEFAULTS = {
@@ -21,6 +21,9 @@ var DEFAULTS = {
   // Show the title
   title: true,
 
+  // Show the dimensions of images
+  showDimensions: false,
+
   // Show the toolbar
   toolbar: true,
 
@@ -30,8 +33,14 @@ var DEFAULTS = {
   // Enable to move the image
   movable: true,
 
+  // Enable to limit move inside screen
+  limitMove: false,
+
   // Enable to zoom the image
   zoomable: true,
+
+  // Enable to always zoom from center
+  centerZoom: true,
 
   // Enable to rotate the image
   rotatable: true,
@@ -1727,8 +1736,11 @@ var methods = {
     var onViewed = function onViewed() {
       var imageData = _this.imageData;
 
-
-      title.textContent = alt + ' (' + imageData.naturalWidth + ' \xD7 ' + imageData.naturalHeight + ')';
+      if (_this.options.showDimensions === true) {
+        title.textContent = alt + ' (' + imageData.naturalWidth + ' \xD7 ' + imageData.naturalHeight + ')';
+      } else {
+        title.textContent = alt;
+      }
     };
     var onLoad = void 0;
 
@@ -1844,6 +1856,8 @@ var methods = {
   moveTo: function moveTo(x) {
     var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : x;
     var imageData = this.imageData;
+    var windowWidth = window.innerWidth.windowWidth;
+    var windowHeight = window.innerHeight.windowHeight;
 
 
     x = Number(x);
@@ -1853,11 +1867,39 @@ var methods = {
       var changed = false;
 
       if (isNumber(x)) {
+        if (this.options.limitMove) {
+          if (imageData.width > windowWidth) {
+            if (x + imageData.width < windowWidth) {
+              x = windowWidth - imageData.width;
+            }
+            x = x > 0 ? 0 : x;
+          } else {
+            if (x + imageData.width > windowWidth) {
+              x = windowWidth - imageData.width;
+            }
+            x = x < 0 ? 0 : x;
+          }
+        }
+
         imageData.left = x;
         changed = true;
       }
 
       if (isNumber(y)) {
+        if (this.options.limitMove) {
+          if (imageData.height > windowHeight) {
+            if (y + imageData.height < windowHeight) {
+              y = windowHeight - imageData.height;
+            }
+            y = y > 0 ? 0 : y;
+          } else {
+            if (y + imageData.height > windowHeight) {
+              y = windowHeight - imageData.height;
+            }
+            y = y < 0 ? 0 : y;
+          }
+        }
+
         imageData.top = y;
         changed = true;
       }
@@ -1965,8 +2007,13 @@ var methods = {
         };
 
         // Zoom from the triggering point of the event
-        imageData.left -= (newWidth - imageData.width) * ((center.pageX - offset.left - imageData.left) / imageData.width);
-        imageData.top -= (newHeight - imageData.height) * ((center.pageY - offset.top - imageData.top) / imageData.height);
+        if (options.centerZoom === false) {
+          imageData.left -= (newWidth - imageData.width) * ((center.pageX - offset.left - imageData.left) / imageData.width);
+          imageData.top -= (newHeight - imageData.height) * ((center.pageY - offset.top - imageData.top) / imageData.height);
+        } else {
+          imageData.left -= (newWidth - imageData.width) / 2;
+          imageData.top -= (newHeight - imageData.height) / 2;
+        }
       } else {
         // Zoom from the center of the image
         imageData.left -= (newWidth - imageData.width) / 2;

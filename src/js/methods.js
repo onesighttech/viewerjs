@@ -256,8 +256,11 @@ export default {
     // Generate title after viewed
     const onViewed = () => {
       const { imageData } = this;
-
-      title.textContent = `${alt} (${imageData.naturalWidth} × ${imageData.naturalHeight})`;
+      if (this.options.showDimensions === true) {
+        title.textContent = `${alt} (${imageData.naturalWidth} × ${imageData.naturalHeight})`;
+      } else {
+        title.textContent = alt;
+      }
     };
     let onLoad;
 
@@ -366,6 +369,8 @@ export default {
    */
   moveTo(x, y = x) {
     const { imageData } = this;
+    const { windowWidth } = window.innerWidth;
+    const { windowHeight } = window.innerHeight;
 
     x = Number(x);
     y = Number(y);
@@ -374,11 +379,39 @@ export default {
       let changed = false;
 
       if (isNumber(x)) {
+        if (this.options.limitMove) {
+          if (imageData.width > windowWidth) {
+            if (x + imageData.width < windowWidth) {
+              x = windowWidth - imageData.width;
+            }
+            x = x > 0 ? 0 : x;
+          } else {
+            if (x + imageData.width > windowWidth) {
+              x = windowWidth - imageData.width;
+            }
+            x = x < 0 ? 0 : x;
+          }
+        }
+
         imageData.left = x;
         changed = true;
       }
 
       if (isNumber(y)) {
+        if (this.options.limitMove) {
+          if (imageData.height > windowHeight) {
+            if (y + imageData.height < windowHeight) {
+              y = windowHeight - imageData.height;
+            }
+            y = y > 0 ? 0 : y;
+          } else {
+            if (y + imageData.height > windowHeight) {
+              y = windowHeight - imageData.height;
+            }
+            y = y < 0 ? 0 : y;
+          }
+        }
+
         imageData.top = y;
         changed = true;
       }
@@ -472,12 +505,15 @@ export default {
         };
 
         // Zoom from the triggering point of the event
-        imageData.left -= (newWidth - imageData.width) * (
-          ((center.pageX - offset.left) - imageData.left) / imageData.width
-        );
-        imageData.top -= (newHeight - imageData.height) * (
-          ((center.pageY - offset.top) - imageData.top) / imageData.height
-        );
+        if (options.centerZoom === false) {
+          imageData.left -= (newWidth - imageData.width) *
+            ((center.pageX - offset.left - imageData.left) / imageData.width);
+          imageData.top -= (newHeight - imageData.height) *
+            ((center.pageY - offset.top - imageData.top) / imageData.height);
+        } else {
+          imageData.left -= (newWidth - imageData.width) / 2;
+          imageData.top -= (newHeight - imageData.height) / 2;
+        }
       } else {
         // Zoom from the center of the image
         imageData.left -= (newWidth - imageData.width) / 2;

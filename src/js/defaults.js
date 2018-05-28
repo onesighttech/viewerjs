@@ -11,6 +11,9 @@ export default {
   // Show the title
   title: true,
 
+  // Show the dimensions of images
+  showDimensions: true,
+
   // Show the toolbar
   toolbar: true,
 
@@ -20,8 +23,14 @@ export default {
   // Enable to move the image
   movable: true,
 
+  // Enable to limit move inside screen
+  limitMove: false,
+
   // Enable to zoom the image
   zoomable: true,
+
+  // Enable to always zoom from center
+  centerZoom: false,
 
   // Enable to rotate the image
   rotatable: true,
