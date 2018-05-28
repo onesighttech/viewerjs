@@ -369,8 +369,8 @@ export default {
    */
   moveTo(x, y = x) {
     const { imageData } = this;
-    const { windowWidth } = window.innerWidth;
-    const { windowHeight } = window.innerHeight;
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
 
     x = Number(x);
     y = Number(y);

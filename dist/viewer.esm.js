@@ -5,7 +5,7 @@
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2018-05-28T14:38:55.999Z
+ * Date: 2018-05-28T19:14:28.236Z
  */
 
 var DEFAULTS = {
@@ -22,7 +22,7 @@ var DEFAULTS = {
   title: true,
 
   // Show the dimensions of images
-  showDimensions: false,
+  showDimensions: true,
 
   // Show the toolbar
   toolbar: true,
@@ -40,7 +40,7 @@ var DEFAULTS = {
   zoomable: true,
 
   // Enable to always zoom from center
-  centerZoom: true,
+  centerZoom: false,
 
   // Enable to rotate the image
   rotatable: true,
@@ -1856,9 +1856,9 @@ var methods = {
   moveTo: function moveTo(x) {
     var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : x;
     var imageData = this.imageData;
-    var windowWidth = window.innerWidth.windowWidth;
-    var windowHeight = window.innerHeight.windowHeight;
 
+    var windowWidth = window.innerWidth;
+    var windowHeight = window.innerHeight;
 
     x = Number(x);
     y = Number(y);
