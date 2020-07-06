@@ -207,6 +207,7 @@ export default {
       element,
       options,
       title,
+      mainTitle,
       canvas,
     } = this;
     const item = this.items[index];
@@ -250,6 +251,7 @@ export default {
     // Center current item
     this.renderList();
 
+    mainTitle.innerHTML = getData(img, 'mainTitle');
     // Clear title
     title.innerHTML = '';
 
@@ -960,6 +962,7 @@ export default {
           this.index = 0;
           this.imageData = {};
           this.canvas.innerHTML = '';
+          this.mainTitle.innerHTML = '';
           this.title.innerHTML = '';
         }
       }

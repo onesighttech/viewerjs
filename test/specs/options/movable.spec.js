@@ -14,7 +14,7 @@ describe('movable (option)', () => {
         done();
       },
     });
-
+    false;
     expect(viewer.options.movable).to.be.true;
   });
 

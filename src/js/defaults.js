@@ -8,6 +8,9 @@ export default {
   // Show the navbar
   navbar: true,
 
+  // Show the main title
+  mainTitle: true,
+
   // Show the title
   title: true,
 

@@ -10,6 +10,7 @@ import {
   addListener,
   assign,
   forEach,
+  getData,
   getImageNameFromURL,
   getImageNaturalSizes,
   getTransforms,
@@ -70,6 +71,7 @@ export default {
       const { src } = image;
       const alt = image.alt || getImageNameFromURL(src);
       let { url } = options;
+      const mainTitle = getData(image, 'mainTitle');
 
       if (isString(url)) {
         url = image.getAttribute(url);
@@ -85,6 +87,7 @@ export default {
             ' data-viewer-action="view"' +
             ` data-index="${i}"` +
             ` data-original-url="${url || src}"` +
+            ` data-main-title="${mainTitle}"` +
             ` alt="${alt}"` +
           '>' +
         '</li>');

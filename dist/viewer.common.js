@@ -5,7 +5,7 @@
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2018-05-28T19:14:28.236Z
+ * Date: 2020-07-03T15:59:18.311Z
  */
 
 'use strict';
@@ -19,6 +19,9 @@ var DEFAULTS = {
 
   // Show the navbar
   navbar: true,
+
+  // Show the main title
+  mainTitle: true,
 
   // Show the title
   title: true,
@@ -116,7 +119,7 @@ var DEFAULTS = {
   zoomed: null
 };
 
-var TEMPLATE = '<div class="viewer-container" touch-action="none">' + '<div class="viewer-canvas"></div>' + '<div class="viewer-footer">' + '<div class="viewer-title"></div>' + '<div class="viewer-toolbar"></div>' + '<div class="viewer-navbar">' + '<ul class="viewer-list"></ul>' + '</div>' + '</div>' + '<div class="viewer-tooltip"></div>' + '<div role="button" class="viewer-button" data-viewer-action="mix"></div>' + '<div class="viewer-player"></div>' + '</div>';
+var TEMPLATE = '<div class="viewer-container" touch-action="none">' + '<div class="viewer-canvas"></div>' + '<div class="viewer-footer">' + '<div class="viewer-main-title"></div>' + '<div class="viewer-title"></div>' + '<div class="viewer-toolbar"></div>' + '<div class="viewer-navbar">' + '<ul class="viewer-list"></ul>' + '</div>' + '</div>' + '<div class="viewer-tooltip"></div>' + '<div role="button" class="viewer-button" data-viewer-action="mix"></div>' + '<div class="viewer-player"></div>' + '</div>';
 
 var IN_BROWSER = typeof window !== 'undefined';
 var WINDOW = IN_BROWSER ? window : {};
@@ -908,6 +911,7 @@ var render = {
       var alt = image.alt || getImageNameFromURL(src);
       var url = options.url;
 
+      var mainTitle = getData(image, 'mainTitle');
 
       if (isString(url)) {
         url = image.getAttribute(url);
@@ -916,7 +920,7 @@ var render = {
       }
 
       if (src || url) {
-        items.push('<li>' + '<img' + (' src="' + (src || url) + '"') + ' role="button"' + ' data-viewer-action="view"' + (' data-index="' + i + '"') + (' data-original-url="' + (url || src) + '"') + (' alt="' + alt + '"') + '>' + '</li>');
+        items.push('<li>' + '<img' + (' src="' + (src || url) + '"') + ' role="button"' + ' data-viewer-action="view"' + (' data-index="' + i + '"') + (' data-original-url="' + (url || src) + '"') + (' data-main-title="' + mainTitle + '"') + (' alt="' + alt + '"') + '>' + '</li>');
       }
     });
 
@@ -1688,6 +1692,7 @@ var methods = {
     var element = this.element,
         options = this.options,
         title = this.title,
+        mainTitle = this.mainTitle,
         canvas = this.canvas;
 
     var item = this.items[index];
@@ -1731,6 +1736,7 @@ var methods = {
     // Center current item
     this.renderList();
 
+    mainTitle.innerHTML = getData(img, 'mainTitle');
     // Clear title
     title.innerHTML = '';
 
@@ -2497,6 +2503,7 @@ var methods = {
           this.index = 0;
           this.imageData = {};
           this.canvas.innerHTML = '';
+          this.mainTitle.innerHTML = '';
           this.title.innerHTML = '';
         }
       }
@@ -2883,6 +2890,7 @@ var Viewer = function () {
       template.innerHTML = TEMPLATE;
 
       var viewer = template.querySelector('.' + NAMESPACE + '-container');
+      var mainTitle = viewer.querySelector('.' + NAMESPACE + '-main-title');
       var title = viewer.querySelector('.' + NAMESPACE + '-title');
       var toolbar = viewer.querySelector('.' + NAMESPACE + '-toolbar');
       var navbar = viewer.querySelector('.' + NAMESPACE + '-navbar');
@@ -2891,6 +2899,7 @@ var Viewer = function () {
 
       this.parent = parent;
       this.viewer = viewer;
+      this.mainTitle = mainTitle;
       this.title = title;
       this.toolbar = toolbar;
       this.navbar = navbar;
@@ -2901,6 +2910,7 @@ var Viewer = function () {
       this.player = viewer.querySelector('.' + NAMESPACE + '-player');
       this.list = viewer.querySelector('.' + NAMESPACE + '-list');
 
+      addClass(mainTitle, !options.mainTitle ? CLASS_HIDE : getResponsiveClass(options.mainTitle));
       addClass(title, !options.title ? CLASS_HIDE : getResponsiveClass(options.title));
       addClass(navbar, !options.navbar ? CLASS_HIDE : getResponsiveClass(options.navbar));
       toggleClass(button, CLASS_HIDE, !options.button);

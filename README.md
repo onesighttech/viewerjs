@@ -24,7 +24,7 @@
 
 ## Features
 
-- Supports 36 [options](#options)
+- Supports 37 [options](#options)
 - Supports 23 [methods](#methods)
 - Supports 9 [events](#events)
 - Supports modal and inline modes
@@ -155,6 +155,22 @@ Show the button on the top-right of the viewer.
 
 Specify the visibility of the navbar.
 
+### mainTitle
+
+- Type: `Boolean` or `Number`
+- Default: `true`
+- Options:
+  - `0` or `false`: hide the title
+  - `1` or `true`: show the title
+  - `2`: show the main title only when the screen width is greater than 768 pixels
+  - `3`: show the main title only when the screen width is greater than 992 pixels
+  - `4`: show the main title only when the screen width is greater than 1200 pixels
+
+Specify the visibility of the main title (the current image's name and dimensions).
+
+> The name comes from the `data-main-title` attribute of an image element.
+
+
 ### title
 
 - Type: `Boolean` or `Number`
@@ -223,6 +239,13 @@ Show the tooltip with image ratio (percentage) when zoom in or zoom out.
 - Default: `true`
 
 Enable to move the image.
+
+### limitMove
+
+- Type: `Boolean`
+- Default: `false`
+
+Enable and the image will never disappear from the screen if moved.
 
 ### zoomable
 
